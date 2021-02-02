@@ -17,7 +17,7 @@ router.delete("/events", AuthMiddleware, eventsController.delete);
 router.get("/filter-events", eventsController.get_with_filter);
 
 //http://localhost:3001/api/tasks
-router.post("/tasks", tasksController.add);
+router.post("/tasks", AuthMiddleware, tasksController.add);
 router.get("/tasks", tasksController.get);
 router.delete("/tasks", AuthMiddleware, tasksController.delete);
 router.get("/filter-tasks", tasksController.get_with_filter);
@@ -37,10 +37,5 @@ router.get("/links", uLink.get);
 
 // //http://localhost:3001/api/auth
 router.get("/auth", authController);
-
-// router.get("/test", async (req, res) => {
-//   const result = await EventsSchema.find({});
-//   res.json(result);
-// });
 
 module.exports = router;
