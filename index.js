@@ -17,12 +17,12 @@ app.use(bodyParser.json());
 
 app.use("/api", router);
 
-const PORT = process.env.PORT || config.get("port");
+const port = process.env.PORT || config.get("port");
 
 const start = async () => {
   try {
     await mongoose.connect(
-      "mongodb+srv://ivan:ivanZalevskiy1@cluster0.mpokw.mongodb.net/test",
+      "mongodb+srv://ivan:ivanZalevskiy1@cluster0.mpokw.mongodb.net/universe?retryWrites=true&w=majority",
       { useNewUrlParser: true },
       { useUnifiedTopology: true }
     );
@@ -31,9 +31,9 @@ const start = async () => {
   }
 };
 
-app.listen(PORT, (err) => {
+app.listen(port, (err) => {
   if (err) return console.log(err);
-  console.log("server has been started on port", PORT);
+  console.log("server has been started on port", port);
 });
 
 start();

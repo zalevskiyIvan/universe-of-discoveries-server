@@ -25,9 +25,10 @@ exports.eventsController = {
   get: async (req, res) => {
     try {
       const { klass, subject, page = 1, limit = 4 } = req.query;
-      const events = await EventsSchema.find({ klass, subject })
-        .limit(limit * 1)
-        .skip((page - 1) * limit);
+      // const events = await EventsSchema.find({ klass, subject })
+      //   .limit(limit * 1)
+      //   .skip((page - 1) * limit);
+      const events = await EventsSchema.find({});
       res.status(200).json(events);
     } catch (e) {
       res.status(500).json({ message: "server error" });
