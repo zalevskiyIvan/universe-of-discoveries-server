@@ -16,6 +16,7 @@ exports.eventsController = {
         date,
       });
       console.log(klass);
+
       const event = await post.save();
 
       res.status(201).json({ id: event._id });
