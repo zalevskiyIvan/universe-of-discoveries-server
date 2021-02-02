@@ -31,7 +31,9 @@ const start = async () => {
     console.log("MONGO_ERROR:", e);
   }
 };
-
+app.use("/", (req, res) => {
+  res.send("поздравляю");
+});
 app.listen(port, (err) => {
   if (err) return console.log(err);
   console.log("server has been started on port", port);
