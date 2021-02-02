@@ -22,7 +22,7 @@ const PORT = process.env.PORT || config.get("port");
 const start = async () => {
   try {
     await mongoose.connect(
-      "mongodb+srv://ivan:ivanZalevskiy@cluster0.mpokw.mongodb.net/universe?retryWrites=true&w=majority",
+      "mongodb+srv://ivan:ivanZalevskiy1@cluster0.mpokw.mongodb.net/test",
       { useNewUrlParser: true },
       { useUnifiedTopology: true }
     );
