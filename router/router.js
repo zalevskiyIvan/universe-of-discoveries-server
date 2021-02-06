@@ -26,6 +26,12 @@ router.get("/filter-tasks", tasksController.get_with_filter);
 router.get("/short-projects", shortProjectController.get);
 router.delete("/short-projects", AuthMiddleware, shortProjectController.delete);
 router.get("/filter-short-projects", shortProjectController.get_with_filter);
+router.get("/pending-short-projects", shortProjectController.pending);
+router.get("/allow-short-projects", shortProjectController.allow);
+router.get(
+  "/pending-filter-short-projects",
+  shortProjectController.get_with_filter_pending
+);
 
 // //http://localhost:3001/api/projects
 router.post("/projects", projectController.add);
