@@ -52,8 +52,11 @@ exports.tasksController = {
   get_with_filter: async (req, res) => {
     try {
       const { klass, subject, filter } = req.query;
-      const task = await TasksSchema.find({ klass, subject });
+      let task;
+      if (klass === "0") task = await TasksSchema.find({ subject });
+      if (klass !== "0") task = await TasksSchema.find({ klass, subject });
       if (!filter) res.status(200).json(task);
+
       const result = task.filter(
         (e) =>
           e.header.slice(0, filter.length).toLowerCase() == filter.toLowerCase()

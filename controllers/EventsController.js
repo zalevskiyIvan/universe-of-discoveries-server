@@ -55,8 +55,9 @@ exports.eventsController = {
   get_with_filter: async (req, res) => {
     try {
       const { klass, subject, filter } = req.query;
-      const events = await EventsSchema.find({ klass, subject });
-
+      let events;
+      if (klass === "0") events = await EventsSchema.find({ subject });
+      if (klass !== "0") events = await EventsSchema.find({ klass, subject });
       if (!filter) res.status(200).json(events);
 
       const result = events.filter(
