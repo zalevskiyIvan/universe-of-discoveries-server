@@ -11,13 +11,18 @@ const { AuthMiddleware } = require("../middlewares/AuthMiddleware");
 const router = express.Router();
 
 // http://localhost:3001/api/events
-router.post("/events", eventsController.add);
+router.post("/events", AuthMiddleware, eventsController.add);
 router.get("/events", eventsController.get);
-router.delete("/events", AuthMiddleware, eventsController.delete);
+router.delete(
+  "/events",
+  AuthMiddleware,
+  AuthMiddleware,
+  eventsController.delete
+);
 router.get("/filter-events", eventsController.get_with_filter);
 
 //http://localhost:3001/api/tasks
-router.post("/tasks", AuthMiddleware, tasksController.add);
+router.post("/tasks", AuthMiddleware, AuthMiddleware, tasksController.add);
 router.get("/tasks", tasksController.get);
 router.delete("/tasks", AuthMiddleware, tasksController.delete);
 router.get("/filter-tasks", tasksController.get_with_filter);
@@ -26,10 +31,19 @@ router.get("/filter-tasks", tasksController.get_with_filter);
 router.get("/short-projects", shortProjectController.get);
 router.delete("/short-projects", AuthMiddleware, shortProjectController.delete);
 router.get("/filter-short-projects", shortProjectController.get_with_filter);
-router.get("/pending-short-projects", shortProjectController.pending);
-router.get("/allow-short-projects", shortProjectController.allow);
+router.get(
+  "/pending-short-projects",
+  AuthMiddleware,
+  shortProjectController.pending
+);
+router.get(
+  "/allow-short-projects",
+  AuthMiddleware,
+  shortProjectController.allow
+);
 router.get(
   "/pending-filter-short-projects",
+  AuthMiddleware,
   shortProjectController.get_with_filter_pending
 );
 
@@ -38,7 +52,7 @@ router.post("/projects", projectController.add);
 router.get("/projects", projectController.get);
 
 //http://localhost:3001/api/links
-router.post("/links", AuthMiddleware, uLink.add);
+router.post("/links", AuthMiddleware, AuthMiddleware, uLink.add);
 router.get("/links", uLink.get);
 
 // //http://localhost:3001/api/auth

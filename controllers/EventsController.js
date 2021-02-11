@@ -66,7 +66,7 @@ exports.eventsController = {
       );
       res.status(200).json(result);
     } catch (e) {
-      res.status(500).json({ message: "server error" });
+      return res.status(500).json({ message: "re-authorization" });
     }
   },
 };
