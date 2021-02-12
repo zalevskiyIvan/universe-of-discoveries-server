@@ -4,9 +4,9 @@ const jwt = require("jsonwebtoken");
 
 exports.authController = async (req, res) => {
   const token = jwt.sign(
-    { key: "user" }, // dont think about this, its dont raise meaning
+    {}, // dont think about this, its dont raise meaning
     config.get("jwt_secret"),
-    { expiresIn: "1min" }
+    { expiresIn: "1h" }
   );
   res.status(200).json({ token });
 };
