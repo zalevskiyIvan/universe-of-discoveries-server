@@ -34,6 +34,8 @@ exports.projectController = {
         allowed,
       });
       const project = await post.save();
+      // shortDescription: 1, header: 1, date: 1, allowed: 1
+      // const shortProject = {project.shortDescription,}
       res.status(201).json(project);
     } catch (e) {
       res.status(500).json({ message: "server error" });

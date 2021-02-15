@@ -56,6 +56,6 @@ router.post("/links", AuthMiddleware, AuthMiddleware, uLink.add);
 router.get("/links", uLink.get);
 
 // //http://localhost:3001/api/auth
-router.get("/auth", authController);
+router.post("/auth", authController);
 
 module.exports = router;

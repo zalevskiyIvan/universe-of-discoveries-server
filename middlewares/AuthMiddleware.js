@@ -9,7 +9,7 @@ exports.AuthMiddleware = (req, res, next) => {
     if (!token) return res.status(205).json({ message: "re-authorization" });
 
     const decoded = jwt.verify(token, config.get("jwt_secret"));
-    if (!decoded) return res.status(205).json({ message: "re-authorization" });
+    if (!decoded) return res.status(403).json({ message: "re-authorization" });
   } catch (e) {
     res.status(205).json({ message: "re-authorization" });
   }

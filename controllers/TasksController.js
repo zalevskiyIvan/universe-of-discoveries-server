@@ -24,17 +24,20 @@ exports.tasksController = {
   get: async (req, res) => {
     try {
       const { klass, subject, page, limit = 4 } = req.query;
+
       if (klass !== "0") {
+        const totalCount = await TasksSchema.find({ klass, subject }).count();
         const task = await TasksSchema.find({ klass, subject })
           .limit(limit * 1)
           .skip((page - 1) * limit);
-        res.status(200).json(task);
+        res.status(200).json({ task, totalCount });
       }
       if (klass === "0") {
-        const task = await TasksSchema.find({ subject })
+        const totalCount = await TasksSchema.find({ subject }).count();
+        const tasks = await TasksSchema.find({ subject })
           .limit(limit * 1)
           .skip((page - 1) * limit);
-        res.status(200).json(task);
+        res.status(200).json({ tasks, totalCount });
       }
     } catch (e) {
       res.status(500).json({ message: "server error", e });

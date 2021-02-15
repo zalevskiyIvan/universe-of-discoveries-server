@@ -3,10 +3,10 @@ const jwt = require("jsonwebtoken");
 //                      AUTH
 
 exports.authController = async (req, res) => {
-  const token = jwt.sign(
-    {}, // dont think about this, its dont raise meaning
-    config.get("jwt_secret"),
-    { expiresIn: "1h" }
-  );
-  res.status(200).json({ token });
+  const { password } = req.body;
+  const correctPassword = config.get("correct_password");
+  if (correctPassword === password) {
+    const token = jwt.sign({}, config.get("jwt_secret"), { expiresIn: "1h" });
+    res.status(200).json({ token });
+  } else res.status(400).json({ message: "uncorrect password" });
 };

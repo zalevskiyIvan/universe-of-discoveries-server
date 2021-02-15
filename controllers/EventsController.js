@@ -15,7 +15,6 @@ exports.eventsController = {
         subject,
         date,
       });
-      console.log(klass);
 
       const event = await post.save();
 
@@ -27,17 +26,20 @@ exports.eventsController = {
   get: async (req, res) => {
     try {
       const { klass, subject, page = 1, limit = 4 } = req.query;
+
       if (klass !== "0") {
+        const totalCount = await EventsSchema.find({ klass, subject }).count();
         const events = await EventsSchema.find({ klass, subject })
           .limit(limit * 1)
           .skip((page - 1) * limit);
-        res.status(200).json(events);
+        res.status(200).json({ events, totalCount });
       }
       if (klass === "0") {
+        const totalCount = await EventsSchema.find({ subject }).count();
         const events = await EventsSchema.find({ subject })
           .limit(limit * 1)
           .skip((page - 1) * limit);
-        res.status(200).json(events);
+        res.status(200).json({ events, totalCount });
       }
     } catch (e) {
       res.status(500).json({ message: "server error" });
