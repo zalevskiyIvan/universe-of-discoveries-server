@@ -3,9 +3,9 @@ const { TasksSchema } = require("../model/schemes");
 exports.tasksController = {
   add: async (req, res) => {
     try {
-      const { klass, header, body, img, subject, date } = req.body;
+      const { klass, header, body, img, subject, date, parallel } = req.body;
 
-      if (!klass && !body && !header && subject)
+      if (!klass || !body || !header || !subject)
         return res.status(400).json({ message: "no data" });
       const post = new TasksSchema({
         klass,
@@ -27,7 +27,10 @@ exports.tasksController = {
 
       if (klass !== "0") {
         const totalCount = await TasksSchema.find({ klass, subject }).count();
-        const task = await TasksSchema.find({ klass, subject })
+        const task = await TasksSchema.find({
+          klass: klass | parallel,
+          subject,
+        })
           .limit(limit * 1)
           .skip((page - 1) * limit);
         res.status(200).json({ task, totalCount });
@@ -57,7 +60,8 @@ exports.tasksController = {
       const { klass, subject, filter } = req.query;
       let task;
       if (klass === "0") task = await TasksSchema.find({ subject });
-      if (klass !== "0") task = await TasksSchema.find({ klass, subject });
+      if (klass !== "0")
+        task = await TasksSchema.find({ klass: klass | parallel, subject });
       if (!filter) res.status(200).json(task);
 
       const result = task.filter(

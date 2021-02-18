@@ -4,7 +4,7 @@ exports.eventsController = {
   add: async (req, res) => {
     try {
       const { klass, header, body, img, subject, date } = req.body;
-      if (!klass && !body && !header && subject)
+      if (!klass || !body || !header || !subject)
         return res.status(400).json({ message: "no data" });
 
       const post = new EventsSchema({
@@ -25,13 +25,20 @@ exports.eventsController = {
   },
   get: async (req, res) => {
     try {
-      const { klass, subject, page = 1, limit = 4 } = req.query;
-
+      const { klass, subject, page = 1, limit = 4, parallel } = req.query;
       if (klass !== "0") {
-        const totalCount = await EventsSchema.find({ klass, subject }).count();
-        const events = await EventsSchema.find({ klass, subject })
+        // const totalCount = await EventsSchema.find({
+        //   klass: kalss || parallel,
+        //   subject,
+        // }).count();
+        const totalCount = 1;
+        const events = await EventsSchema.find({
+          klass: klass | parallel,
+          subject,
+        })
           .limit(limit * 1)
           .skip((page - 1) * limit);
+        console.log(events);
         res.status(200).json({ events, totalCount });
       }
       if (klass === "0") {
@@ -59,7 +66,8 @@ exports.eventsController = {
       const { klass, subject, filter } = req.query;
       let events;
       if (klass === "0") events = await EventsSchema.find({ subject });
-      if (klass !== "0") events = await EventsSchema.find({ klass, subject });
+      if (klass !== "0")
+        events = await EventsSchema.find({ klass: klass | parallel, subject });
       if (!filter) res.status(200).json(events);
 
       const result = events.filter(
