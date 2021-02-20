@@ -74,4 +74,34 @@ exports.tasksController = {
       res.status(500).json({ message: "server error" });
     }
   },
+  edit: async (req, res) => {
+    try {
+      const { header, body, date, id } = req.body;
+
+      if (header) {
+        const newPost = await TasksSchema.findByIdAndUpdate(
+          id,
+          { header },
+          { new: true }
+        );
+        res.status(200).json(newPost);
+      } else if (body) {
+        const newPost = await TasksSchema.findByIdAndUpdate(
+          id,
+          { body },
+          { new: true }
+        );
+        res.status(200).json(newPost);
+      } else if (date) {
+        const newPost = await TasksSchema.findByIdAndUpdate(
+          id,
+          { date },
+          { new: true }
+        );
+        res.status(200).json(newPost);
+      } else res.status(204).json({ message: "not data" });
+    } catch (e) {
+      res.status(500).json({ message: "server error" });
+    }
+  },
 };

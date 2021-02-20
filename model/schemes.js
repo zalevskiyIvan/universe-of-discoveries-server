@@ -25,7 +25,7 @@ const projectSchema = new Schema({
   subject: String,
   date: String,
   // img: [{imgURL: String, id: Number}],
-  presentationHtml: String,
+  // presentationHtml: String,
   shortDescription: String,
   members: [String],
   allowed: { type: Boolean, required: true },

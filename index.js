@@ -23,9 +23,12 @@ const start = async () => {
   try {
     await mongoose.connect(
       "mongodb+srv://ivan:ivanZalevskiy1@cluster0.mpokw.mongodb.net/universe?retryWrites=true&w=majority",
-
-      { useNewUrlParser: true },
-      { useUnifiedTopology: true }
+      {
+        useNewUrlParser: true,
+        useUnifiedTopology: true,
+        useCreateIndex: true,
+        useFindAndModify: false,
+      }
     );
   } catch (e) {
     console.log("MONGO_ERROR:", e);

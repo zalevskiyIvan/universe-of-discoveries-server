@@ -47,6 +47,43 @@ exports.shortProjectController = {
       res.status(500).json({ message: "server error" });
     }
   },
+  edit: async (req, res) => {
+    try {
+      const { header, shortDescription, date, id } = req.body;
+
+      if (header) {
+        const newPost = await ProjectSchema.findByIdAndUpdate(
+          id,
+          { header },
+          { new: true }
+        );
+        res.status(200).json(newPost);
+      } else if (shortDescription) {
+        const newPost = await ProjectSchema.findByIdAndUpdate(
+          id,
+          { shortDescription },
+          { new: true }
+        );
+        res.status(200).json(newPost);
+      } else if (date) {
+        const newPost = await ProjectSchema.findByIdAndUpdate(
+          id,
+          { date },
+          { new: true }
+        );
+        //  { shortDescription: 1, header: 1, date: 1, allowed: 1 }
+        const project = {
+          shortDescription: newPost.shortDescription,
+          header: newPost.header,
+          date: newPost.date,
+          allowed: newPost.allowed,
+        };
+        res.status(200).json(project);
+      } else res.status(204).json({ message: "not data" });
+    } catch (e) {
+      res.status(500).json({ message: "server error" });
+    }
+  },
   pending: async (req, res) => {
     try {
       const { subject, page, limit = 4 } = req.query;

@@ -27,18 +27,16 @@ exports.eventsController = {
     try {
       const { klass, subject, page = 1, limit = 4, parallel } = req.query;
       if (klass !== "0") {
-        // const totalCount = await EventsSchema.find({
-        //   klass: kalss || parallel,
-        //   subject,
-        // }).count();
-        const totalCount = 1;
+        const totalCount = await EventsSchema.find({
+          klass: kalss || parallel,
+          subject,
+        }).count();
         const events = await EventsSchema.find({
           klass: klass | parallel,
           subject,
         })
           .limit(limit * 1)
           .skip((page - 1) * limit);
-        console.log(events);
         res.status(200).json({ events, totalCount });
       }
       if (klass === "0") {
@@ -77,6 +75,36 @@ exports.eventsController = {
       res.status(200).json(result);
     } catch (e) {
       return res.status(500).json({ message: "re-authorization" });
+    }
+  },
+  edit: async (req, res) => {
+    try {
+      const { header, body, date, id } = req.body;
+
+      if (header) {
+        const newPost = await EventsSchema.findByIdAndUpdate(
+          id,
+          { header },
+          { new: true }
+        );
+        res.status(200).json(newPost);
+      } else if (body) {
+        const newPost = await EventsSchema.findByIdAndUpdate(
+          id,
+          { body },
+          { new: true }
+        );
+        res.status(200).json(newPost);
+      } else if (date) {
+        const newPost = await EventsSchema.findByIdAndUpdate(
+          id,
+          { date },
+          { new: true }
+        );
+        res.status(200).json(newPost);
+      } else res.status(204).json({ message: "not data" });
+    } catch (e) {
+      res.status(500).json({ message: "server error" });
     }
   },
 };

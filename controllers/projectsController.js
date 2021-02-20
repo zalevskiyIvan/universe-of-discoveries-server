@@ -4,7 +4,7 @@ exports.projectController = {
   add: async (req, res) => {
     //make one object
     try {
-      const {
+      const data = ({
         header,
         purpose,
         tasks,
@@ -17,25 +17,12 @@ exports.projectController = {
         shortDescription,
         members,
         allowed,
-      } = req.body;
+      } = req.body);
       if (!header) return res.status(400).json({ message: "no data" });
       const post = new ProjectSchema({
-        header,
-        purpose,
-        tasks,
-        relevance,
-        conclusions,
-        results,
-        subject,
-        date,
-        presentationHtml,
-        shortDescription,
-        members,
-        allowed,
+        ...data,
       });
       const project = await post.save();
-      // shortDescription: 1, header: 1, date: 1, allowed: 1
-      // const shortProject = {project.shortDescription,}
       res.status(201).json(project);
     } catch (e) {
       res.status(500).json({ message: "server error" });
@@ -46,6 +33,73 @@ exports.projectController = {
       const { subject, id } = req.query;
       const project = await ProjectSchema.find({ subject, _id: id });
       res.status(200).json(project);
+    } catch (e) {
+      res.status(500).json({ message: "server error" });
+    }
+  },
+  edit: async (req, res) => {
+    try {
+      const {
+        header,
+        purpose,
+        tasks,
+        relevance,
+        conclusions,
+        results,
+        members,
+        id,
+      } = req.body;
+
+      if (header) {
+        const newPost = await ProjectSchema.findByIdAndUpdate(
+          id,
+          { header },
+          { new: true }
+        );
+        res.status(200).json(newPost);
+      } else if (purpose) {
+        const newPost = await ProjectSchema.findByIdAndUpdate(
+          id,
+          { purpose },
+          { new: true }
+        );
+        res.status(200).json(newPost);
+      } else if (relevance) {
+        const newPost = await ProjectSchema.findByIdAndUpdate(
+          id,
+          { relevance },
+          { new: true }
+        );
+        res.status(200).json(newPost);
+      } else if (tasks) {
+        const newPost = await ProjectSchema.findByIdAndUpdate(
+          id,
+          { tasks },
+          { new: true }
+        );
+        res.status(200).json(newPost);
+      } else if (conclusions) {
+        const newPost = await ProjectSchema.findByIdAndUpdate(
+          id,
+          { conclusions },
+          { new: true }
+        );
+        res.status(200).json(newPost);
+      } else if (results) {
+        const newPost = await ProjectSchema.findByIdAndUpdate(
+          id,
+          { daresultste },
+          { new: true }
+        );
+        res.status(200).json(newPost);
+      } else if (members) {
+        const newPost = await ProjectSchema.findByIdAndUpdate(
+          id,
+          { members },
+          { new: true }
+        );
+        res.status(200).json(newPost);
+      } else res.status(204).json({ message: "not data" });
     } catch (e) {
       res.status(500).json({ message: "server error" });
     }

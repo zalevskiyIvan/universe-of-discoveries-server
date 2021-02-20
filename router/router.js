@@ -13,6 +13,7 @@ const router = express.Router();
 // http://localhost:3001/api/events
 router.post("/events", AuthMiddleware, eventsController.add);
 router.get("/events", eventsController.get);
+router.put("/events", AuthMiddleware, eventsController.edit);
 router.delete("/events", AuthMiddleware, eventsController.delete);
 router.get("/filter-events", eventsController.get_with_filter);
 
@@ -20,11 +21,13 @@ router.get("/filter-events", eventsController.get_with_filter);
 router.post("/tasks", AuthMiddleware, tasksController.add);
 router.get("/tasks", tasksController.get);
 router.delete("/tasks", AuthMiddleware, tasksController.delete);
+router.put("/tasks", AuthMiddleware, tasksController.edit);
 router.get("/filter-tasks", tasksController.get_with_filter);
 
 // //http://localhost:3001/api/short-projects
 router.get("/short-projects", shortProjectController.get);
 router.delete("/short-projects", AuthMiddleware, shortProjectController.delete);
+router.put("/short-projects", AuthMiddleware, shortProjectController.edit);
 router.get("/filter-short-projects", shortProjectController.get_with_filter);
 router.get(
   "/pending-short-projects",
@@ -45,6 +48,7 @@ router.get(
 // //http://localhost:3001/api/projects
 router.post("/projects", projectController.add);
 router.get("/projects", projectController.get);
+router.put("/projects", AuthMiddleware, projectController.edit);
 
 //http://localhost:3001/api/links
 router.post("/links", AuthMiddleware, uLink.add);
