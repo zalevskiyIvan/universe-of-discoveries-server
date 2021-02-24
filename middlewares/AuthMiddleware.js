@@ -5,7 +5,8 @@ exports.AuthMiddleware = (req, res, next) => {
   if (req.method === "OPTIONS") next();
 
   try {
-    const token = req.get("Authorization").split(" ")[1];
+    const token = req.cookies.token;
+
     if (!token) return res.status(403).json({ message: "re-authorization" });
 
     const decoded = jwt.verify(token, config.get("jwt_secret"));

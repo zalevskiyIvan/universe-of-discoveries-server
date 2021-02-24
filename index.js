@@ -1,18 +1,25 @@
 const express = require("express");
-// const mongodb = require('mongodb')
 const mongoose = require("mongoose");
 const bodyParser = require("body-parser");
 const cors = require("cors");
 const router = require("./router/router");
+const cookieParser = require("cookie-parser");
 const config = require("config");
 const app = express();
 
-app.use(cors());
+app.use(
+  cors({
+    credentials: true,
+    origin: config.get("origin"), // fix to deploy version
+  })
+);
 app.use(
   bodyParser.urlencoded({
     extended: true,
   })
 );
+app.use(cookieParser("123"));
+
 app.use(bodyParser.json());
 
 app.use("/api", router);
