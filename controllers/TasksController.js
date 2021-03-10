@@ -31,6 +31,7 @@ exports.tasksController = {
           klass: klass | parallel,
           subject,
         })
+          .sort({ _id: -1 })
           .limit(limit * 1)
           .skip((page - 1) * limit);
         res.status(200).json({ task, totalCount });
@@ -38,6 +39,7 @@ exports.tasksController = {
       if (klass === "0") {
         const totalCount = await TasksSchema.find({ subject }).count();
         const tasks = await TasksSchema.find({ subject })
+          .sort({ _id: -1 })
           .limit(limit * 1)
           .skip((page - 1) * limit);
         res.status(200).json({ tasks, totalCount });
@@ -59,9 +61,13 @@ exports.tasksController = {
     try {
       const { klass, subject, filter } = req.query;
       let task;
-      if (klass === "0") task = await TasksSchema.find({ subject });
+      if (klass === "0")
+        task = await TasksSchema.find({ subject }).sort({ _id: -1 });
       if (klass !== "0")
-        task = await TasksSchema.find({ klass: klass | parallel, subject });
+        task = await TasksSchema.find({
+          klass: klass | parallel,
+          subject,
+        }).sort({ _id: -1 });
       if (!filter) res.status(200).json(task);
 
       const result = task.filter(

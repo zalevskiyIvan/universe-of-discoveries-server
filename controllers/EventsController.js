@@ -35,6 +35,7 @@ exports.eventsController = {
           klass: klass | parallel,
           subject,
         })
+          .sort({ _id: -1 })
           .limit(limit * 1)
           .skip((page - 1) * limit);
         res.status(200).json({ events, totalCount });
@@ -42,6 +43,7 @@ exports.eventsController = {
       if (klass === "0") {
         const totalCount = await EventsSchema.find({ subject }).count();
         const events = await EventsSchema.find({ subject })
+          .sort({ _id: -1 })
           .limit(limit * 1)
           .skip((page - 1) * limit);
         res.status(200).json({ events, totalCount });
@@ -63,9 +65,13 @@ exports.eventsController = {
     try {
       const { klass, subject, filter } = req.query;
       let events;
-      if (klass === "0") events = await EventsSchema.find({ subject });
+      if (klass === "0")
+        events = await EventsSchema.find({ subject }).sort({ _id: -1 });
       if (klass !== "0")
-        events = await EventsSchema.find({ klass: klass | parallel, subject });
+        events = await EventsSchema.find({
+          klass: klass | parallel,
+          subject,
+        }).sort({ _id: -1 });
       if (!filter) res.status(200).json(events);
 
       const result = events.filter(

@@ -6,12 +6,12 @@ exports.shortProjectController = {
       const { subject, page, limit = 4 } = req.query;
       const totalCount = await ProjectSchema.find({
         subject,
-        allowed: true,
       }).count();
       const projects = await ProjectSchema.find(
-        { subject, allowed: true },
+        { subject },
         { shortDescription: 1, header: 1, date: 1, allowed: 1 }
       )
+        .sort({ _id: -1 })
         .limit(limit * 1)
         .skip((page - 1) * limit);
       res.status(200).json({ projects, totalCount });
@@ -23,9 +23,9 @@ exports.shortProjectController = {
     try {
       const { subject, filter } = req.query;
       const projects = await ProjectSchema.find(
-        { subject, allowed: true },
+        { subject },
         { shortDescription: 1, header: 1, date: 1, allowed: 1 }
-      );
+      ).sort({ _id: -1 });
 
       if (!filter) res.status(200).json(projects);
       const result = projects.filter(
@@ -71,7 +71,6 @@ exports.shortProjectController = {
           { date },
           { new: true }
         );
-        //  { shortDescription: 1, header: 1, date: 1, allowed: 1 }
         const project = {
           shortDescription: newPost.shortDescription,
           header: newPost.header,
@@ -84,24 +83,25 @@ exports.shortProjectController = {
       res.status(500).json({ message: "server error" });
     }
   },
-  pending: async (req, res) => {
-    try {
-      const { subject, page, limit = 4 } = req.query;
-      const totalCount = await ProjectSchema.find({
-        subject,
-        allowed: true,
-      }).count();
-      const projects = await ProjectSchema.find(
-        { subject, allowed: false },
-        { shortDescription: 1, header: 1, date: 1 }
-      )
-        .limit(limit * 1)
-        .skip((page - 1) * limit);
-      res.status(200).json({ projects, totalCount });
-    } catch (e) {
-      res.status(500).json({ message: "server error" });
-    }
-  },
+  // pending: async (req, res) => {
+  //   try {
+  //     const { subject, page, limit = 4 } = req.query;
+  //     const totalCount = await ProjectSchema.find({
+  //       subject,
+  //       allowed: true,
+  //     }).count();
+  //     const projects = await ProjectSchema.find(
+  //       { subject, allowed: false },
+  //       { shortDescription: 1, header: 1, date: 1 }
+  //     )
+  //       .sort({ _id: -1 })
+  //       .limit(limit * 1)
+  //       .skip((page - 1) * limit);
+  //     res.status(200).json({ projects, totalCount });
+  //   } catch (e) {
+  //     res.status(500).json({ message: "server error" });
+  //   }
+  // },
   allow: async (req, res) => {
     try {
       const { id } = req.query;
@@ -113,22 +113,22 @@ exports.shortProjectController = {
       res.status(500).json({ message: "server error" });
     }
   },
-  get_with_filter_pending: async (req, res) => {
-    try {
-      const { subject, filter } = req.query;
-      const projects = await ProjectSchema.find(
-        { subject, allowed: false },
-        { shortDescription: 1, header: 1, date: 1, allowed: 1 }
-      );
+  // get_with_filter_pending: async (req, res) => {
+  //   try {
+  //     const { subject, filter } = req.query;
+  //     const projects = await ProjectSchema.find(
+  //       { subject, allowed: false },
+  //       { shortDescription: 1, header: 1, date: 1, allowed: 1 }
+  //     ).sort({ _id: -1 });
 
-      if (!filter) res.status(200).json(projects);
-      const result = projects.filter(
-        (e) =>
-          e.header.slice(0, filter.length).toLowerCase() == filter.toLowerCase()
-      );
-      res.status(200).json(result);
-    } catch (e) {
-      res.status(500).json({ message: "server error" });
-    }
-  },
+  //     if (!filter) res.status(200).json(projects);
+  //     const result = projects.filter(
+  //       (e) =>
+  //         e.header.slice(0, filter.length).toLowerCase() == filter.toLowerCase()
+  //     );
+  //     res.status(200).json(result);
+  //   } catch (e) {
+  //     res.status(500).json({ message: "server error" });
+  //   }
+  // },
 };

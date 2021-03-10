@@ -8,7 +8,12 @@ const {
 const { authController } = require("../controllers/AuthController");
 const { projectController } = require("../controllers/projectsController");
 const { AuthMiddleware } = require("../middlewares/AuthMiddleware");
+const { chairController } = require("../controllers/ChairController");
 const router = express.Router();
+
+// http://localhost:3001/api/chairs
+router.get("/chairs", chairController.get);
+// router.post("/chairs", chairController.create);
 
 // http://localhost:3001/api/events
 router.post("/events", AuthMiddleware, eventsController.add);
@@ -29,21 +34,21 @@ router.get("/short-projects", shortProjectController.get);
 router.delete("/short-projects", AuthMiddleware, shortProjectController.delete);
 router.put("/short-projects", AuthMiddleware, shortProjectController.edit);
 router.get("/filter-short-projects", shortProjectController.get_with_filter);
-router.get(
-  "/pending-short-projects",
-  AuthMiddleware,
-  shortProjectController.pending
-);
+// router.get(
+//   "/pending-short-projects",
+//   AuthMiddleware,
+//   shortProjectController.pending
+// );
 router.get(
   "/allow-short-projects",
   AuthMiddleware,
   shortProjectController.allow
 );
-router.get(
-  "/pending-filter-short-projects",
-  AuthMiddleware,
-  shortProjectController.get_with_filter_pending
-);
+// router.get(
+//   "/pending-filter-short-projects",
+//   AuthMiddleware,
+//   shortProjectController.get_with_filter_pending
+// );
 
 // //http://localhost:3001/api/projects
 router.post("/projects", projectController.add);

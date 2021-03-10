@@ -2,7 +2,6 @@ const { ProjectSchema } = require("../model/schemes");
 
 exports.projectController = {
   add: async (req, res) => {
-    //make one object
     try {
       const data = ({
         header,
