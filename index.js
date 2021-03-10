@@ -10,6 +10,7 @@ const app = express();
 app.use(
   cors({
     credentials: true,
+    origin: config.get("origin"), // fix to deploy version
   })
 );
 app.use(
