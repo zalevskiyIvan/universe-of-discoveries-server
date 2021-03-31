@@ -25,22 +25,22 @@ exports.eventsController = {
   },
   get: async (req, res) => {
     try {
-      const { klass, subject, page = 1, limit = 4, parallel } = req.query;
-      if (klass !== "0") {
+      const { klass, subject, page = 1, limit = 8 } = req.query;
+      if (klass !== "common") {
         const totalCount = await EventsSchema.find({
-          klass: kalss || parallel,
+          klass,
           subject,
         }).count();
         const events = await EventsSchema.find({
-          klass: klass | parallel,
+          klass,
           subject,
         })
           .sort({ _id: -1 })
-          .limit(limit * 1)
+          .limit(limit)
           .skip((page - 1) * limit);
         res.status(200).json({ events, totalCount });
       }
-      if (klass === "0") {
+      if (klass === "common") {
         const totalCount = await EventsSchema.find({ subject }).count();
         const events = await EventsSchema.find({ subject })
           .sort({ _id: -1 })
@@ -65,9 +65,9 @@ exports.eventsController = {
     try {
       const { klass, subject, filter } = req.query;
       let events;
-      if (klass === "0")
+      if (klass === "common")
         events = await EventsSchema.find({ subject }).sort({ _id: -1 });
-      if (klass !== "0")
+      if (klass !== "common")
         events = await EventsSchema.find({
           klass: klass | parallel,
           subject,

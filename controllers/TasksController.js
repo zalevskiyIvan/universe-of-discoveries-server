@@ -3,7 +3,7 @@ const { TasksSchema } = require("../model/schemes");
 exports.tasksController = {
   add: async (req, res) => {
     try {
-      const { klass, header, body, img, subject, date, parallel } = req.body;
+      const { klass, header, body, img, subject, date } = req.body;
 
       if (!klass || !body || !header || !subject)
         return res.status(400).json({ message: "no data" });
@@ -23,12 +23,12 @@ exports.tasksController = {
   },
   get: async (req, res) => {
     try {
-      const { klass, subject, page, limit = 4 } = req.query;
+      const { klass, subject, page, limit = 8 } = req.query;
 
-      if (klass !== "0") {
+      if (klass !== "common") {
         const totalCount = await TasksSchema.find({ klass, subject }).count();
         const task = await TasksSchema.find({
-          klass: klass | parallel,
+          klass,
           subject,
         })
           .sort({ _id: -1 })
@@ -36,7 +36,7 @@ exports.tasksController = {
           .skip((page - 1) * limit);
         res.status(200).json({ task, totalCount });
       }
-      if (klass === "0") {
+      if (klass === "common") {
         const totalCount = await TasksSchema.find({ subject }).count();
         const tasks = await TasksSchema.find({ subject })
           .sort({ _id: -1 })
@@ -61,11 +61,11 @@ exports.tasksController = {
     try {
       const { klass, subject, filter } = req.query;
       let task;
-      if (klass === "0")
+      if (klass === "common")
         task = await TasksSchema.find({ subject }).sort({ _id: -1 });
-      if (klass !== "0")
+      if (klass !== "common")
         task = await TasksSchema.find({
-          klass: klass | parallel,
+          klass,
           subject,
         }).sort({ _id: -1 });
       if (!filter) res.status(200).json(task);
