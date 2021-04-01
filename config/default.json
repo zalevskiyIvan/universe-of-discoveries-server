@@ -2,5 +2,6 @@
   "port": 3001,
   "jwt_secret": "exelent site for school",
   "correct_password": "tyghcn",
-  "origin": "https://universe-of-discoveries.herokuapp.com"
+  "origin": "https://universe-of-discoveries.herokuapp.com",
+  "sessionSecret": "verySecret"
 }
