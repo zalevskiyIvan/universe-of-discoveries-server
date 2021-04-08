@@ -5,7 +5,7 @@ const cors = require("cors");
 const router = require("./router/router");
 const cookieParser = require("cookie-parser");
 const config = require("config");
-const session = require("express-session");
+const { shouldSendSameSiteNone } = require("should-send-same-site-none");
 const app = express();
 
 app.use(
@@ -21,19 +21,8 @@ app.use(
 );
 app.use(cookieParser("123"));
 
-const sessionConfig = {
-  secret: config.get("sessionSecret"),
-  name: "universe",
-  resave: false,
-  saveUninitialized: false,
-  cookie: {
-    sameSite: "none",
-  },
-};
-app.use(session(sessionConfig));
-
 app.use(bodyParser.json());
-
+app.use(shouldSendSameSiteNone);
 app.use("/api", router);
 
 const port = process.env.PORT || config.get("port");
