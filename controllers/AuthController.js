@@ -7,7 +7,7 @@ exports.authController = async (req, res) => {
   const correctPassword = config.get("correct_password");
   if (correctPassword === password) {
     const token = jwt.sign({}, config.get("jwt_secret"), { expiresIn: "1h" });
-    res.cookie("token", token, { httpOnly: true, sameSite: "none" });
+    res.cookie("token", token, { sameSite: "none", secure: true });
     res.status(200).json({ token });
   } else res.status(400).json({ message: "uncorrect password" });
 };
